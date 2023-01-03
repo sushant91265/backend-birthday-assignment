@@ -1,10 +1,12 @@
 package com.saltpay.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpay.model.Person;
 
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -18,14 +20,21 @@ public class BirthdayFinder {
     }
 
     /**
-     * Find the person with the birthday.
-     * @param people List of people
-     * @return the people with the birthday
+     * Parse the JSON into a list of people.
+     * @param root the root node of the JSON
+     * @return the list of birthday people
      */
-    public List<String> process(final List<Person> people) {
+    public List<String> process(final JsonNode root) {
+        List<String> birthdayPeople = new ArrayList<>();
         LocalDate today = LocalDate.now(clock);
         logger.info("Today is " + today.format(formatter));
-        return people.parallelStream().filter(person -> this.isBirthdayToday(person, today)).map(Person::getName).toList();
+        root.forEach(node -> {
+            Person person = new Person(node.get(0).asText(), node.get(1).asText(), node.get(2).asText());
+            if (this.isBirthdayToday(person, today)) {
+                birthdayPeople.add(person.getName());
+            }
+        });
+        return birthdayPeople;
     }
 
     /**

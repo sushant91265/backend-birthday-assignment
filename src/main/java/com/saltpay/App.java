@@ -5,7 +5,6 @@ import java.time.Clock;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.saltpay.model.Person;
 import com.saltpay.service.BirthdayFinder;
 import com.saltpay.util.FileUtils;
 
@@ -18,9 +17,9 @@ public class App {
     public static void main(String[] args) throws IOException {
         String inputJson = FileUtils.readFile(args.length>=1 ? args[0] : DEFAULT_INPUT_FILE);
         JsonNode root = FileUtils.parseString(inputJson, JsonNode.class);
-        List<Person> people = FileUtils.parseJson(root, Person.class);
 
-        List<String> birthdays = new BirthdayFinder(Clock.systemDefaultZone()).process(people);
+        BirthdayFinder birthdayFinder = new BirthdayFinder(Clock.systemDefaultZone());
+        List<String> birthdays = birthdayFinder.process(root);
         System.out.println(birthdays);
     }
 }

@@ -24,13 +24,4 @@ public final class FileUtils {
         Path filePath = Path.of(fileName);
         return Files.readString(filePath);
     }
-
-    public static <T> List<T> parseJson(JsonNode root, Class<T> cls) {
-        List<T> people = new ArrayList<>();
-        for (JsonNode node : root) {
-            Person person = new Person(node.get(0).asText(), node.get(1).asText(), node.get(2).asText());
-            people.add((T) person);
-        }
-        return people;
-    }
 }
