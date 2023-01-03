@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class BirthdayFinder {
+public class BirthdayFinder implements  BirthdayFinderInterface {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     private final Logger logger = Logger.getLogger(BirthdayFinder.class.getName());
     private final Clock clock;
@@ -24,6 +24,7 @@ public class BirthdayFinder {
      * @param root the root node of the JSON
      * @return the list of birthday people
      */
+    @Override
     public List<String> process(final JsonNode root) {
         List<String> birthdayPeople = new ArrayList<>();
         LocalDate today = LocalDate.now(clock);
