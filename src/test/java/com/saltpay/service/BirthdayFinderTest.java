@@ -14,11 +14,12 @@ import java.util.List;
 
 public class BirthdayFinderTest {
     private static final String RESOURCE = "src/test/resources/input-test.json";
+    private static final String ERRORED_DATE_RESOURCE = "src/test/resources/invalid-date-test.json";
+    private static final String INVALID_RESOURCE = "src/test/resources/invalid-input-test.json";
     private JsonNode root;
     @Before
     public void setUp() throws IOException {
-        String inputJson = FileUtils.readFile(RESOURCE);
-        root = FileUtils.parseString(inputJson, JsonNode.class);
+        root = FileUtils.parseFile(RESOURCE);
     }
 
     @Test
@@ -72,6 +73,24 @@ public class BirthdayFinderTest {
     @Test
     public void testProcessForNoBirthDay_6() {
         Clock clock = Clock.fixed(Instant.parse("2025-11-28T00:00:00.00Z"), ZoneId.of("UTC"));
+        List<String> birthdays = new BirthdayFinder(clock).process(root);
+
+        Assert.assertEquals(0, birthdays.size());
+    }
+
+    @Test
+    public void testProcessIncorrectDateFormat_7() throws IOException {
+        Clock clock = Clock.fixed(Instant.parse("2025-11-28T00:00:00.00Z"), ZoneId.of("UTC"));
+        root = FileUtils.parseFile(ERRORED_DATE_RESOURCE);
+        List<String> birthdays = new BirthdayFinder(clock).process(root);
+
+        Assert.assertEquals(0, birthdays.size());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testProcessInvalidInputThrowsException_8() throws IOException {
+        Clock clock = Clock.fixed(Instant.parse("2025-11-28T00:00:00.00Z"), ZoneId.of("UTC"));
+        root = FileUtils.parseFile(INVALID_RESOURCE);
         List<String> birthdays = new BirthdayFinder(clock).process(root);
 
         Assert.assertEquals(0, birthdays.size());

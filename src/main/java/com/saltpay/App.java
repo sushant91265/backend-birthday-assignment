@@ -15,8 +15,7 @@ public class App {
      * This is the main entry point for the application.
      */
     public static void main(String[] args) throws IOException {
-        String inputJson = FileUtils.readFile(args.length>=1 ? args[0] : DEFAULT_INPUT_FILE);
-        JsonNode root = FileUtils.parseString(inputJson, JsonNode.class);
+        JsonNode root = FileUtils.parseFile(args.length>=1 ? args[0] : DEFAULT_INPUT_FILE);
 
         BirthdayFinder birthdayFinder = new BirthdayFinder(Clock.systemDefaultZone());
         List<String> birthdays = birthdayFinder.process(root);
