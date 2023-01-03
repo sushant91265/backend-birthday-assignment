@@ -33,7 +33,8 @@
 - `BirthdayFinderTest.java` - contains the test cases for the service class
 - The input test files are present in the `src/test/resources` directory, the test function names are same as input test files names.
 
+
 ### Improvements
 - The application can be improved by adding more test cases.
 - The application can be improved by adding more validations.
-- We can collect the names of people whose birthday is today during the parsing phase.
+- We can collect the names of people whose birthday is today during the parsing phase for streaming application.
