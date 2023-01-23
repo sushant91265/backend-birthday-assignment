@@ -1,6 +1,5 @@
 package com.saltpay.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpay.model.Person;
 
 import java.time.Clock;
@@ -21,26 +20,19 @@ public class BirthdayFinder implements  BirthdayFinderInterface {
 
     /**
      * Parse the JSON into a list of people.
-     * @param root the root node of the JSON
+     * @param people the list of person objects
      * @return the list of birthday people
      */
     @Override
-    public List<String> process(final JsonNode root) {
+    public List<String> process(final List<Person> people) {
         List<String> birthdayPeople = new ArrayList<>();
-        try {
-            LocalDate today = LocalDate.now(clock);
-            logger.info("Today is " + today.format(formatter));
-
-            root.forEach(node -> {
-                Person person = new Person(node.get(0).asText(), node.get(1).asText(), node.get(2).asText());
-                if (this.isBirthdayToday(person, today)) {
-                    birthdayPeople.add(person.getName());
-                }
-            });
-        } catch (RuntimeException e) {
-            logger.severe("Error processing JSON: " + e);
-            throw new RuntimeException(e);
-        }
+        LocalDate today = LocalDate.now(clock);
+        logger.info("Today is " + today.format(formatter));
+        people.forEach(person -> {
+            if (this.isBirthdayToday(person, today)) {
+                birthdayPeople.add(person.getName());
+            }
+        });
         return birthdayPeople;
     }
 
@@ -60,7 +52,7 @@ public class BirthdayFinder implements  BirthdayFinderInterface {
             return (dob.getMonth() == today.getMonth() && dob.getDayOfMonth() == today.getDayOfMonth());
         } catch (RuntimeException e) {
             logger.warning("Unable to parse date: " + e.getMessage());
-            return false;
+            throw e;
         }
     }
 }
