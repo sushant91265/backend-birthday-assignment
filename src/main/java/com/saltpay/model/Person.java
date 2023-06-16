@@ -24,6 +24,7 @@ public class Person {
     }
 
     /**
+     * TODO: what if the person does not have both first name and last name? 
      * This method is used to print the Person object in a readable format.
      */
     public String getName() {
